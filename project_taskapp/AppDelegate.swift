@@ -4,21 +4,38 @@
 //
 //  Created by 後達哉 on 2018/02/22.
 //  Copyright © 2018年 Ta2ya1228. All rights reserved.
-//
+//アプリの状態に応じてなんらかの処理を行う時に使う
 
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+
+
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate{
 
     var window: UIWindow?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+       
+    // ユーザに通知の許可を求める
+        //UserNorificationsのインスタンス(center)を獲得
+        let center = UNUserNotificationCenter.current()
+        
+        //center にrequestAuthorization(options:completionHandler:)メソッドで通知、音を使うことを指定して呼び出し
+        center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+        }
+        center.delegate = self;
+        
         return true
     }
 
+    // アプリがフォアグラウンドの時に通知を受け取ると呼ばれるメソッド
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.sound, .alert])
+    
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -43,4 +60,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-
+}
