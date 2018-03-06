@@ -10,11 +10,11 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating{
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
 
     @IBOutlet weak var tableView: UITableView!
     
-    var mySearchBar = UISearchController(searchResultsController: nil)
+    @IBOutlet weak var mySearchBar: UISearchBar!
     
     let realm = try! Realm()
   
@@ -32,9 +32,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
         
         mySearchBar.delegate = self
-        mySearchBar.searchResultsUpdater = self
-        
-        self.tableView.tableHeaderView = mySearchBar.searchBar
 
     }
 
@@ -66,7 +63,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         formatter.dateFormat = "yyyy-MM-dd HH:mm" //dateFormatはdateクラスを文字列に変換する  //"年-月-日 時間：分"
         
         let dateString:String = formatter.string(from: task.date)
-        cell.detailTextLabel?.text = "\(dateString)       category:\(task.category)"
+        cell.detailTextLabel?.text = "alram:\(dateString)       category:\(task.category)"
         
         return cell
     }
@@ -146,16 +143,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
 //category == searchController.searchBar.textで設定されているものがずらっと出てくる
-    func updateSearchResults(for searchController: UISearchController) {
-        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if let searchText = mySearchBar.text, !searchText.isEmpty {
             taskArray = try! Realm().objects(Task.self).filter("category == %@", searchText)
             
-        }
-        tableView.reloadData()
-        if let searchText = searchController.searchBar.text, searchText.isEmpty {
+        }else{
             taskArray = try! Realm().objects(Task.self)
-    }
-    
+                }
+        tableView.reloadData()
     
     
 

@@ -17,10 +17,6 @@ class InputViewController: UIViewController {
     let realm = try! Realm()        //インスタンス
     
 
-    
-    
-    
-
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
